@@ -1,0 +1,27 @@
+{
+	"manifest_version": 3,
+	"name": "Speech Info Rate",
+	"version": "1.0",
+	"description": "Measure the linguistic information rate (bits/sec) of spoken speech.",
+	"action": {
+		"default_popup": "popup.html"
+	},
+	"permissions": [
+		"activeTab",
+		"tabs"
+	],
+	"host_permissions": [
+		"https://*/*",
+		"http://*/*"
+	],
+	"web_accessible_resources": [
+		{
+			"resources": [
+				"permission.html"
+			],
+			"matches": [
+				"<all_urls>"
+			]
+		}
+	]
+}
