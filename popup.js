@@ -189,8 +189,15 @@ function updateRealTimeDisplay() {
     const currentTime = new Date();
     const durationSeconds = (currentTime - startTime) / 1000;
     const fullTranscript = finalTranscript + interimTranscript;
-    const words = fullTranscript.trim().split(/\s+/).filter(word => word.length > 0).length;
-    const avgEntropyPerWord = words > 0 ? entropyPerWord(fullTranscript) : 0;
+    
+    // Improved word counting - handle empty transcript case
+    let words = 0;
+    const trimmedTranscript = fullTranscript.trim();
+    if (trimmedTranscript.length > 0) {
+        words = trimmedTranscript.split(/\s+/).filter(word => word.length > 0).length;
+    }
+    
+    const avgEntropyPerWord = words > 0 ? entropyPerWord(trimmedTranscript) : 0;
     const infoRate = words > 0 ? (words / durationSeconds) * avgEntropyPerWord : 0;
     
     // Update stats with smooth animations
@@ -320,6 +327,7 @@ function initializeSpeechRecognition() {
     recognition.lang = 'en-US';
 
     recognition.onstart = () => {
+        console.log('Speech recognition started');
         startTime = new Date();
         finalTranscript = '';
         interimTranscript = '';
@@ -335,10 +343,14 @@ function initializeSpeechRecognition() {
         for (let i = event.resultIndex; i < event.results.length; i++) {
             const transcript = event.results[i][0].transcript;
             
+            console.log(`Speech result ${i}: "${transcript}" (final: ${event.results[i].isFinal})`);
+            
             if (event.results[i].isFinal) {
                 finalTranscript += transcript + ' ';
+                console.log('Updated final transcript:', `"${finalTranscript}"`);
             } else {
                 interimTranscript += transcript;
+                console.log('Updated interim transcript:', `"${interimTranscript}"`);
             }
         }
         
@@ -347,6 +359,7 @@ function initializeSpeechRecognition() {
 
     recognition.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
+        console.log('Error details:', event);
         
         if (event.error === 'no-speech' || event.error === 'audio-capture') {
             console.log('Temporary error, continuing...');
@@ -359,8 +372,10 @@ function initializeSpeechRecognition() {
     };
 
     recognition.onend = () => {
+        console.log('Speech recognition ended, isListening:', isListening);
         if (isListening) {
             try {
+                console.log('Attempting to restart recognition...');
                 recognition.start();
             } catch (error) {
                 console.error('Failed to restart recognition:', error);
@@ -413,17 +428,44 @@ function stopSpeechRecognition() {
             clearInterval(updateInterval);
         }
         
-        // Show final results
-        const endTime = new Date();
-        const durationSeconds = (endTime - startTime) / 1000;
-        const fullTranscript = finalTranscript.trim();
-        const words = fullTranscript.split(/\s+/).filter(word => word.length > 0).length;
+        // Give a small delay to allow final speech recognition results to come in
+        setTimeout(() => {
+            // Show final results
+            const endTime = new Date();
+            const durationSeconds = (endTime - startTime) / 1000;
+        
+        // Include both final and interim transcript for complete analysis
+        const fullTranscript = (finalTranscript + interimTranscript).trim();
+        
+        // Debug logging
+        console.log('Final transcript only:', `"${finalTranscript.trim()}"`);
+        console.log('Interim transcript:', `"${interimTranscript}"`);
+        console.log('Combined transcript:', `"${fullTranscript}"`);
+        console.log('Combined transcript length:', fullTranscript.length);
+        
+        // Improved word counting - handle empty transcript case
+        let words = 0;
+        if (fullTranscript.length > 0) {
+            words = fullTranscript.split(/\s+/).filter(word => word.length > 0).length;
+        }
+        
+        console.log('Word count:', words);
+        
         const avgEntropyPerWord = words > 0 ? entropyPerWord(fullTranscript) : 0;
         const infoRate = words > 0 ? (words / durationSeconds) * avgEntropyPerWord : 0;
         
-        updateStatus('success', 'Recording complete', `Analysis finished: ${words} words, ${infoRate.toFixed(2)} bits/sec`);
-        updateUI();
-        updateTranscript();
+        console.log('Average entropy per word:', avgEntropyPerWord);
+        console.log('Information rate:', infoRate);
+        
+        if (words === 0) {
+            updateStatus('warning', 'No speech detected', `Recording complete but no speech was recognized. Duration: ${durationSeconds.toFixed(1)}s`);
+        } else {
+            updateStatus('success', 'Recording complete', `Analysis finished: ${words} words, ${infoRate.toFixed(2)} bits/sec`);
+        }
+        
+            updateUI();
+            updateTranscript();
+        }, 100); // 100ms delay to allow final results
     }
 }
 
