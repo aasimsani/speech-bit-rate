@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speech Analyzer</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet">
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Speech Analyzer</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet">
+        <style>
         * {
             margin: 0;
             padding: 0;
@@ -17,9 +17,12 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            width: 400px;
-            height: 600px;
+            width: 380px;
+            height: 480px;
             overflow: hidden;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
         .app-container {
@@ -37,10 +40,11 @@
         .header {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: white;
-            padding: 24px;
+            padding: 16px;
             text-align: center;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
         
         .header::before {
@@ -60,7 +64,7 @@
         }
         
         .header h1 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             margin-bottom: 4px;
             display: flex;
@@ -70,7 +74,7 @@
         }
         
         .header p {
-            font-size: 14px;
+            font-size: 12px;
             opacity: 0.9;
         }
         
@@ -87,21 +91,22 @@
         
         .content {
             flex: 1;
-            padding: 24px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 12px;
             overflow-y: auto;
+            min-height: 0;
         }
         
         .status-card {
             background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
             border: 1px solid #0ea5e9;
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: 8px;
+            padding: 8px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             transition: all 0.3s ease;
         }
         
@@ -127,11 +132,12 @@
         }
         
         .status-dot {
-            width: 12px;
-            height: 12px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #0ea5e9;
             position: relative;
+            flex-shrink: 0;
         }
         
         .status-dot::after {
@@ -156,26 +162,27 @@
         }
         
         .status-text h3 {
-            font-size: 14px;
+            font-size: 11px;
             font-weight: 600;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
             color: #374151;
         }
         
         .status-text p {
-            font-size: 12px;
+            font-size: 9px;
             opacity: 0.8;
             color: #6b7280;
         }
         
         .loading-spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid #e5e7eb;
-            border-top: 2px solid #3b82f6;
+            width: 12px;
+            height: 12px;
+            border: 1px solid #e5e7eb;
+            border-top: 1px solid #3b82f6;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-left: auto;
+            flex-shrink: 0;
         }
         
         .button-group {
@@ -185,17 +192,17 @@
         
         .btn {
             flex: 1;
-            padding: 16px 20px;
+            padding: 12px 16px;
             border: none;
             border-radius: 12px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             position: relative;
             overflow: hidden;
         }
@@ -246,15 +253,15 @@
         
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 10px;
         }
         
         .stat-card {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: 8px;
+            padding: 8px;
             text-align: center;
             transition: all 0.2s ease;
             position: relative;
@@ -283,14 +290,14 @@
         }
         
         .stat-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #64748b;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             font-weight: 500;
         }
         
         .stat-value {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
             color: #1e293b;
         }
@@ -303,43 +310,34 @@
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            padding: 16px;
+            padding: 12px;
             flex: 1;
-            min-height: 120px;
-        }
-        
-        .transcript-header {
+            min-height: 70px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-        
-        .transcript-header h3 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #374151;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            flex-direction: column;
+            position: relative;
         }
         
         .live-badge {
             background: #ef4444;
             color: white;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 3px 6px;
+            border-radius: 4px;
             animation: pulse 1s infinite;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 10;
         }
         
         .live-dot {
-            width: 6px;
-            height: 6px;
+            width: 4px;
+            height: 4px;
             background: white;
             border-radius: 50%;
             animation: blink 1s infinite;
@@ -347,15 +345,14 @@
         
         .transcript-content {
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 12px;
+            line-height: 1.3;
             color: #374151;
             background: white;
             padding: 12px;
             border-radius: 8px;
             border: 1px solid #e5e7eb;
-            min-height: 80px;
-            max-height: 80px;
+            flex: 1;
             overflow-y: auto;
         }
         
@@ -376,15 +373,15 @@
         
         .footer {
             text-align: center;
-            font-size: 11px;
+            font-size: 9px;
             color: #6b7280;
-            margin-top: auto;
-            padding: 12px 0;
+            padding: 8px 0;
             border-top: 1px solid #f3f4f6;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
+            flex-shrink: 0;
         }
         
         .privacy-icon {
@@ -461,84 +458,128 @@
         .transcript-content::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+        
+        /* Responsive adjustments for smaller screens */
+        @media (max-height: 450px) {
+            body {
+                height: 400px;
+            }
+            
+            .header {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 16px;
+            }
+            
+            .content {
+                padding: 10px;
+                gap: 8px;
+            }
+            
+            .transcript-card {
+                min-height: 60px;
+            }
+            
+            .stats-grid {
+                gap: 6px;
+            }
+            
+            .stat-card {
+                padding: 4px;
+            }
+            
+            .stat-value {
+                font-size: 16px;
+            }
+            
+            .stat-label {
+                font-size: 9px;
+            }
+            
+            .footer {
+                padding: 4px 0;
+                font-size: 7px;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div class="app-container">
-      <div class="header">
-        <div class="header-content">
-          <h1>
-            <div class="mic-icon">🎤</div>
-            Speech Analyzer
-          </h1>
-          <p>Real-time Information Rate Calculator</p>
-        </div>
-      </div>
-
-      <div class="content">
-        <div id="status-card" class="status-card">
-          <div id="status-dot" class="status-dot"></div>
-          <div class="status-text">
-            <h3 id="status-title">Ready to start</h3>
-            <p id="status-message">Click start to begin speech analysis</p>
-          </div>
-          <div id="loading-spinner" class="loading-spinner"
-            style="display: none;"></div>
-        </div>
-
-        <div class="button-group">
-          <button id="start-btn" class="btn btn-start">
-            <span>▶️</span>
-            Start Recording
-          </button>
-
-          <button id="stop-btn" class="btn btn-stop">
-            <span>⏹️</span>
-            Stop Recording
-          </button>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">Duration</div>
-            <div id="duration-stat" class="stat-value">0.0s</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Words</div>
-            <div id="words-stat" class="stat-value">0</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Entropy/Word</div>
-            <div id="entropy-stat" class="stat-value">0.00</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Info Rate</div>
-            <div id="info-rate-stat" class="stat-value highlight">0.00</div>
-          </div>
-        </div>
-
-        <div class="transcript-card">
-          <div class="transcript-header">
-            <h3>
-              💬 Live Transcript
-            </h3>
-            <div id="live-badge" class="live-badge" style="display: none;">
-              <div class="live-dot"></div>
-              LIVE
+    </head>
+    <body>
+        <div class="app-container">
+            <div class="header">
+                <div class="header-content">
+                    <h1>
+                        <div class="mic-icon">🎤</div>
+                        Speech Analyzer
+                    </h1>
+                    <p>Real-time Information Rate Calculator</p>
+                </div>
             </div>
-          </div>
-          <div id="transcript-content" class="transcript-content">
-            <span class="placeholder-text">Press start to begin recording</span>
-          </div>
+
+            <div class="content">
+                <div id="status-card" class="status-card">
+                    <div id="status-dot" class="status-dot"></div>
+                    <div class="status-text">
+                        <h3 id="status-title">Ready to start</h3>
+                        <p id="status-message">Click start to begin speech
+                            analysis</p>
+                    </div>
+                    <div id="loading-spinner" class="loading-spinner"
+                        style="display: none;"></div>
+                </div>
+
+                <div class="button-group">
+                    <button id="start-btn" class="btn btn-start">
+                        <span>▶️</span>
+                        Start Recording
+                    </button>
+
+                    <button id="stop-btn" class="btn btn-stop">
+                        <span>⏹️</span>
+                        Stop Recording
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Duration</div>
+                        <div id="duration-stat" class="stat-value">0.0s</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Words</div>
+                        <div id="words-stat" class="stat-value">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Entropy/Word</div>
+                        <div id="entropy-stat" class="stat-value">0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Info Rate</div>
+                        <div id="info-rate-stat"
+                            class="stat-value highlight">0.00</div>
+                    </div>
+                </div>
+
+                <div class="transcript-card">
+                    <div id="live-badge" class="live-badge"
+                        style="display: none;">
+                        <div class="live-dot"></div>
+                        LIVE
+                    </div>
+                    <div id="transcript-content" class="transcript-content">
+                        <span class="placeholder-text">💬 Live Transcript -
+                            Press start to begin recording</span>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <div class="privacy-icon">🔒</div>
+                    Audio processed locally • Privacy protected
+                </div>
+            </div>
         </div>
 
-        <div class="footer">
-          <div class="privacy-icon">🔒</div>
-          Audio processed locally • Privacy protected
-        </div>
-      </div>
-    </div>
-
-    <script src="popup.js"></script>
-  </body>
+        <script src="popup.js"></script>
+    </body>
 </html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Test Popup Size</title>
+		<style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 380px;
+            min-height: 480px;
+            max-height: 580px;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .app-container {
+            width: 100%;
+            min-height: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+        }
+        
+        .test-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 10px;
+            color: #6b7280;
+            padding: 10px 0;
+            border-top: 1px solid #f3f4f6;
+            flex-shrink: 0;
+        }
+    </style>
+	</head>
+	<body>
+		<div class="app-container">
+			<div class="header">
+				<h1>🎤 Test Popup Size</h1>
+				<p>Checking if content fits properly</p>
+			</div>
+
+			<div class="content">
+				<div class="test-section">
+					<h3>Section 1</h3>
+					<p>This is test content to verify sizing.</p>
+				</div>
+
+				<div class="test-section">
+					<h3>Section 2</h3>
+					<p>More test content to check scrolling behavior.</p>
+				</div>
+
+				<div class="test-section">
+					<h3>Section 3</h3>
+					<p>Additional content to test overflow handling.</p>
+				</div>
+
+				<div class="test-section">
+					<h3>Section 4</h3>
+					<p>Final section to ensure everything fits or scrolls properly.</p>
+				</div>
+
+				<div class="test-section">
+					<h3>Section 5</h3>
+					<p>Extra content to test scrolling if needed.</p>
+				</div>
+			</div>
+
+			<div class="footer">
+				Test footer content
+			</div>
+		</div>
+	</body>
+</html>

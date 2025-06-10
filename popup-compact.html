@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Speech Analyzer</title>
+		<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 380px;
+            height: 480px;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .app-container {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .header p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        
+        .mic-icon {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            min-height: 0;
+        }
+        
+        .status-card {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #0ea5e9;
+        }
+        
+        .status-text h3 {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 1px;
+            color: #374151;
+        }
+        
+        .status-text p {
+            font-size: 10px;
+            opacity: 0.8;
+            color: #6b7280;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        
+        .btn-start {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-stop {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .stat-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 10px;
+            color: #64748b;
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .stat-value.highlight {
+            color: #3b82f6;
+        }
+        
+        .transcript-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            flex: 1;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .transcript-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+        
+        .transcript-header h3 {
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .live-badge {
+            background: #ef4444;
+            color: white;
+            font-size: 8px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .live-dot {
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .transcript-content {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #374151;
+            background: white;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .placeholder-text {
+            color: #9ca3af;
+            font-style: italic;
+        }
+        
+        .interim-text {
+            color: #3b82f6;
+            font-weight: 500;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 8px;
+            color: #6b7280;
+            padding: 6px 0;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            flex-shrink: 0;
+        }
+        
+        .privacy-icon {
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 6px;
+        }
+        
+        /* Scrollbar styling */
+        .transcript-content::-webkit-scrollbar {
+            width: 3px;
+        }
+        
+        .transcript-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 2px;
+        }
+        
+        .transcript-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 2px;
+        }
+    </style>
+	</head>
+	<body>
+		<div class="app-container">
+			<div class="header">
+				<h1>
+					<div class="mic-icon">🎤</div>
+					Speech Analyzer
+				</h1>
+				<p>Real-time Information Rate Calculator</p>
+			</div>
+
+			<div class="content">
+				<div id="status-card" class="status-card">
+					<div id="status-dot" class="status-dot"></div>
+					<div class="status-text">
+						<h3 id="status-title">Ready to start</h3>
+						<p id="status-message">Click start to begin analysis</p>
+					</div>
+				</div>
+
+				<div class="button-group">
+					<button id="start-btn" class="btn btn-start">
+						<span>▶️</span>
+						Start
+					</button>
+					<button id="stop-btn" class="btn btn-stop">
+						<span>⏹️</span>
+						Stop
+					</button>
+				</div>
+
+				<div class="stats-grid">
+					<div class="stat-card">
+						<div class="stat-label">Duration</div>
+						<div id="duration-stat" class="stat-value">0.0s</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-label">Words</div>
+						<div id="words-stat" class="stat-value">0</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-label">Entropy</div>
+						<div id="entropy-stat" class="stat-value">0.00</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-label">Info Rate</div>
+						<div id="info-rate-stat" class="stat-value highlight">0.00</div>
+					</div>
+				</div>
+
+				<div class="transcript-card">
+					<div class="transcript-header">
+						<h3>💬 Live Transcript</h3>
+						<div id="live-badge" class="live-badge" style="display: none;">
+							<div class="live-dot"></div>
+							LIVE
+						</div>
+					</div>
+					<div id="transcript-content" class="transcript-content">
+						<span class="placeholder-text">Press start to begin recording</span>
+					</div>
+				</div>
+
+				<div class="footer">
+					<div class="privacy-icon">🔒</div>
+					Audio processed locally • Privacy protected
+				</div>
+			</div>
+		</div>
+
+		<script src="popup.js"></script>
+	</body>
+</html>
