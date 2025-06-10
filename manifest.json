@@ -2,7 +2,7 @@
 	"manifest_version": 3,
 	"name": "Speech Information Rate Analyzer",
 	"version": "1.0.0",
-	"description": "Real-time analysis of speech information rate (bits per second) using linguistic entropy calculations. Perfect for researchers, speakers, and language enthusiasts.",
+	"description": "Real-time analysis of speech information rate. Perfect for researchers, speakers, and language enthusiasts.",
 	"author": "Speech Analysis Tools",
 	"homepage_url": "https://github.com/aasimsani/speech-bit-rate",
 	"action": {
