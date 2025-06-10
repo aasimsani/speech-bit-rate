@@ -1,18 +1,20 @@
 {
 	"manifest_version": 3,
-	"name": "Speech Info Rate",
-	"version": "1.0",
-	"description": "Measure the linguistic information rate (bits/sec) of spoken speech.",
+	"name": "Speech Information Rate Analyzer",
+	"version": "1.0.0",
+	"description": "Real-time analysis of speech information rate (bits per second) using linguistic entropy calculations. Perfect for researchers, speakers, and language enthusiasts.",
+	"author": "Speech Analysis Tools",
+	"homepage_url": "https://github.com/aasimsani/speech-bit-rate",
 	"action": {
-		"default_popup": "popup.html"
+		"default_popup": "popup.html",
+		"default_title": "Speech Information Rate Analyzer"
 	},
 	"permissions": [
-		"activeTab",
-		"tabs"
+		"activeTab"
 	],
 	"host_permissions": [
-		"https://*/*",
-		"http://*/*"
+		"https://norvig.com/*",
+		"https://raw.githubusercontent.com/*"
 	],
 	"web_accessible_resources": [
 		{
@@ -23,5 +25,14 @@
 				"<all_urls>"
 			]
 		}
-	]
+	],
+	"icons": {
+		"16": "icons/icon16.png",
+		"32": "icons/icon32.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
+	},
+	"content_security_policy": {
+		"extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://norvig.com https://raw.githubusercontent.com;"
+	}
 }
